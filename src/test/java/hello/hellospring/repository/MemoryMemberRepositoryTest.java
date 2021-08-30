@@ -30,8 +30,8 @@ class MemoryMemberRepositoryTest {
         Member result = repository.findById(member.getId()).get();
         //optional에서 꺼낼 때는 get사용
         // System.out.println("result = " + (result == member));
-        //Assertions.assertEquals(member, result);// 기대값== 실제값
-        assertThat(result).isEqualTo(member);
+        //Assertions.assertEquals(member, result);// 기대값== 실제값 (문자가 아니라 실제값을 바교할 수 있다)
+        assertThat(result).isEqualTo(member);//static import
     }
 
     @Test

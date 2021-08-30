@@ -1,34 +1,22 @@
 package hello.hellospring.service;
-import hello.hellospring.domain.Member;
-import hello.hellospring.repository.MemoryMemberRepository;
 
-import org.junit.jupiter.api.*;
+import hello.hellospring.domain.Member;
+import hello.hellospring.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemberServiceTest {
-    MemberService memberService;
-    //MemoryMemberRepository memberRepository = new MemoryMemberRepository();
-    //객체 생성을 다시 하여서 MemberService에서 생성한 memberRepository 다른 인스턴스가 된다
-    //다른 레파지토리를 
-    MemoryMemberRepository memberRepository;
+@SpringBootTest
+@Transactional//테스트시 먼저 실행 테스트 종료시 반영시키지 않고 rollback을 해준다
+public class MemberServiceIntegrationTest {
+    @Autowired  MemberService memberService;
+    @Autowired
+    MemberRepository memberRepository;
 
-    
-    //동작하기 전에 넣어주기
-    //외부에서 객체를 넣어주도록 처리한다 DI
-    @BeforeEach
-    public void beforeEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);//생성자에 넣어준다
-    }
-
-    @AfterEach
-    public void afterEach() {
-        memberRepository.clearStore();
-    }
-    
     @Test
     public void 회원가입() throws Exception {//join 테스트에서는 한글로 바꾸어도 괜찮음
         //Given 어떤 데이터를 기반으로 하는지
@@ -64,4 +52,5 @@ class MemberServiceTest {
                 () -> memberService.join(member2));//예외가 발생해야 한다
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
     }
+
 }
